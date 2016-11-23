@@ -1,0 +1,107 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}
+    DouMovies
+{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/dataTool.min.js"></script>
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <link rel="icon" href="/static/icon.png">
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-lg-offset-2">
+                <div class="header">
+                    <ul class="nav nav-pills pull-right" role="tablist">
+                        <li role="presentation" class="active"><a href="http://v3.bootcss.com/examples/jumbotron-narrow/#">Home</a></li>
+                        <li role="presentation"><a href="http://v3.bootcss.com/examples/jumbotron-narrow/#">About</a></li>
+                        <li role="presentation"><a href="http://v3.bootcss.com/examples/jumbotron-narrow/#">Contact</a></li>
+                    </ul>
+                    <h3 class="text-muted">D · M</h3>
+                </div>
+            </div>
+            <div class="col-lg-6 col-lg-offset-3" id="dv_graph" style="width: 700px; height: 400px; padding-top: 30px">
+                test
+                <script type="text/javascript">
+                    myChart = echarts.init($("#dv_graph").get(0));
+                    myChart.showLoading();
+                    $.get('/static/gexf/les-miserables.gexf', function (xml) {
+                        myChart.hideLoading();
+
+                        var graph = echarts.dataTool.gexf.parse(xml);
+                        var categories = [];
+                        for (var i = 0; i < 9; i++) {
+                            categories[i] = {
+                                name: '类目' + i
+                            };
+                        }
+                        graph.nodes.forEach(function (node) {
+                            node.itemStyle = null;
+                            node.value = node.symbolSize;
+                            node.symbolSize /= 1.5;
+                            node.label = {
+                                normal: {
+                                    show: node.symbolSize > 30
+                                }
+                            };
+                            node.category = node.attributes.modularity_class;
+                        });
+                        option = {
+                            title: {
+                                text: 'Les Miserables',
+                                subtext: 'Default layout',
+                                top: 'bottom',
+                                left: 'right'
+                            },
+                            tooltip: {},
+                            legend: [{
+                                // selectedMode: 'single',
+                                data: categories.map(function (a) {
+                                    return a.name;
+                                })
+                            }],
+                            animationDuration: 1500,
+                            animationEasingUpdate: 'quinticInOut',
+                            series : [
+                                {
+                                    name: 'Les Miserables',
+                                    type: 'graph',
+                                    layout: 'none',
+                                    data: graph.nodes,
+                                    links: graph.links,
+                                    categories: categories,
+                                    roam: true,
+                                    label: {
+                                        normal: {
+                                            position: 'right',
+                                            formatter: '{b}'
+                                        }
+                                    },
+                                    lineStyle: {
+                                        normal: {
+                                            color: 'source',
+                                            curveness: 0.3
+                                        }
+                                    }
+                                }
+                            ]
+                        };
+
+                        myChart.setOption(option);
+                    }, 'xml');
+                </script>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script></script>
+
+{% endblock %}

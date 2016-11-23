@@ -1,0 +1,85 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}
+    DouMovies
+{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="/static/js/echarts.min.js"></script>
+    <script src="/static/js/dataTool.min.js"></script>
+    <script src="/static/js/jquery-3.1.1.min.js"></script>
+    <link rel="icon" href="/static/icon.png">
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 col-lg-offset-2">
+                <div class="header">
+                    <ul class="nav nav-pills pull-right" role="tablist">
+                        <li role="presentation" class="active"><a href="http://v3.bootcss.com/examples/jumbotron-narrow/#">Home</a></li>
+                        <li role="presentation"><a href="http://v3.bootcss.com/examples/jumbotron-narrow/#">About</a></li>
+                        <li role="presentation"><a href="http://v3.bootcss.com/examples/jumbotron-narrow/#">Contact</a></li>
+                    </ul>
+                    <h3 class="text-muted">D · M</h3>
+                </div>
+            </div>
+            <div class="col-lg-8 col-lg-offset-2" id="dv_graph" style="width: 800px; height: 600px; padding-top: 30px">
+                test
+                <script type="text/javascript">
+                    var myChart = echarts.init($("#dv_graph").get(0));
+                    myChart.showLoading();
+                    $.get('./static/json/zhi.json', function (webkitDep) {
+                        myChart.hideLoading();
+                        console.log(webkitDep);
+
+                        var option = {
+                            title: {
+                                text: '各话题关系图'
+                            },
+                            legend: {
+                                data: ['A', 'B', 'C', 'D']
+                            },
+                            series: [{
+                                type: 'graph',
+                                layout: 'force',
+                                roam: 'scale',
+                                animation: false,
+                                label: {
+                                    normal: {
+                                        position: 'right',
+                                        formatter: '{b}'
+                                    }
+                                },
+                                draggable: true,
+                                data: JSON.parse(webkitDep).nodes.map(function (node, idx) {
+                                    node.id = idx;
+                                    return node;
+                                }),
+                                categories: JSON.parse(webkitDep).categories,
+                                force: {
+                                    // initLayout: 'circular'
+                                    // gravity: 0
+                                    // repulsion: 20,
+                                    edgeLength: 5,
+                                    repulsion: 20
+                                },
+                                edges: JSON.parse(webkitDep).links
+                            }]
+                        };
+
+                        console.log("1234");
+                        myChart.setOption(option);
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script></script>
+
+{% endblock %}
