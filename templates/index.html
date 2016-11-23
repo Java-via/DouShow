@@ -198,14 +198,12 @@
 
                     console.log($('#fade'));
 
-{#                    $('.theme-popover').click(function () {#}
-{#                        event.stopPropagation();#}
-{#                    });#}
 
                     $('body').click(function (){
                         $('#fade').hide();
                         $('.theme-popover').slideUp(300);
                         $('body').animate().css("overflow", "auto");
+
                     })
 
                 </script>
@@ -223,17 +221,17 @@
                                 tooltip: {
                                     trigger: 'item'
                                 },
-{#                                legend: {#}
-{#                                    orient: 'vertical',#}
-{#                                    x: 'left',#}
-{#                                    silent: true,#}
-{#                                    data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']#}
-{#                                },#}
+                                legend: {
+                                    orient: 'vertical',
+                                    x: 'left',
+                                    silent: true,
+                                    data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+                                },
                                 series: [
                                     {
                                         name:'访问来源',
                                         type:'pie',
-                                        silent: true,
+                                        silent: false,
                                         radius: ['50%', '70%'],
                                         avoidLabelOverlap: false,
                                         label: {
