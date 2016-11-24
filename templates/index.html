@@ -194,17 +194,14 @@
                         $('#dv_title').text(params.seriesName);
                         $('body').animate().css("overflow", "hidden");
                         event.stopPropagation();
+
+                        $('#fade').click(function (){
+                            $('#fade').hide();
+                            $('.theme-popover').slideUp(300);
+                            $('body').animate().css("overflow", "auto");
+                        })
                     });
 
-                    console.log($('#fade'));
-
-
-                    $('body').click(function (){
-                        $('#fade').hide();
-                        $('.theme-popover').slideUp(300);
-                        $('body').animate().css("overflow", "auto");
-
-                    })
 
                 </script>
 
